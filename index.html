@@ -20,6 +20,7 @@
     var y = canvas.height-30;
     var dx = 2;
     var dy = -2;
+    var score = 0;
 
     //PADDLE VARIABLES
     var paddleHeight = 10;
@@ -58,10 +59,22 @@
                     if (x > b.x && x <b.x+brickWidth && y > b.y && y <b.y+brickHeight){
                         dy = -dy;
                         b.status = 0;
+                        score++;
+                        if(score == brickRowCount*brickColumnCount) {
+                            alert("YOU WIN, CONGRATULATIONS!");
+                            document.location.reload();
+                            clearInterval(interal);
+                        }
                     }
                 }
             }
         }
+    }
+
+    function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score: "+score, 8, 20);
     }
 
     function keyDownHandler(e){
@@ -126,6 +139,7 @@
         drawBricks();
         drawBall();
         drawPaddle();
+        drawScore();
         collisionDetection();
         
        
@@ -148,13 +162,13 @@
         }
 
         if (rightPressed) {
-            paddleX += 7;
+            paddleX += 13;
             if (paddleX + paddleWidth > canvas.width) {
                 paddleX = canvas.width - paddleWidth;
             }
         }
         else if(leftPressed) {
-            paddleX -= 7;
+            paddleX -= 13;
             if (paddleX < 0) {
                 paddleX = 0;
             }
