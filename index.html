@@ -54,6 +54,38 @@
         }
     }
 
+    function drawBackground() {
+        ctx.beginPath();
+        ctx.rect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "teal";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawBricks() {
+        var cr = Math.floor(Math.random()*256)
+        for(var c=0; c<brickColumnCount; c++) {
+            for (var r=0; r<brickRowCount; r++) {
+                if(bricks[c][r].status ==1){
+                    var brickX = (c*(brickWidth + brickPadding)) + brickOffsetLeft;
+                    var brickY = (r*(brickHeight + brickPadding)) + brickOffsetTop;
+                    bricks[c][r].x = brickX; 
+                    bricks[c][r].y = brickY;
+                    ctx.beginPath();
+                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                    if ((r%2==0) && (c%2==0) || (r%2==1 && c%2==1)) {
+                        ctx.fillStyle = "#000000";
+                    } else {
+                        ctx.fillStyle = "orange";
+                    }
+                    ctx.fill();
+                    ctx.closePath();
+                }
+                
+            }
+        }
+    }
+
     function mouseMoveHandler(e) {
         var relativeX = e.clientX - canvas.offsetLeft;
         if(relativeX > 0 && relativeX < canvas.width) {
@@ -82,14 +114,15 @@
 
     function drawLives() {
         ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = "black";
         ctx.fillText("Lives: "+lives, canvas.width-65, 20);
     }
 
     function drawScore() {
         ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = "black";
         ctx.fillText("Score: "+score, 8, 20);
+        ctx.fillText("Break Out!", 200 , 20 );
     }
 
     function keyDownHandler(e){
@@ -109,32 +142,12 @@
             leftPressed = false;
         }
     }
-
-    function drawBricks() {
-        for(var c=0; c<brickColumnCount; c++) {
-            for (var r=0; r<brickRowCount; r++) {
-                if(bricks[c][r].status ==1){
-                    var brickX = (c*(brickWidth + brickPadding)) + brickOffsetLeft;
-                    var brickY = (r*(brickHeight + brickPadding)) + brickOffsetTop;
-                    bricks[c][r].x = brickX; 
-                    bricks[c][r].y = brickY;
-                    ctx.beginPath();
-                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                    ctx.fillStyle = "#0095DD";
-                    ctx.fill();
-                    ctx.closePath();
-                }
-                
-            }
-        }
-    }
-
-    
+   
 
     function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-        ctx.fillStyle = "#0095DD"
+        ctx.fillStyle = "yellow"
         ctx.fill();
         ctx.closePath();
     }
@@ -142,7 +155,7 @@
     function drawPaddle() {
         ctx.beginPath();
         ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-        ctx.fillStyle = "#0095DD"
+        ctx.fillStyle = "red"
         ctx.fill();
         ctx.closePath();
     }
@@ -151,6 +164,7 @@
     function draw() {
         //drawing code
         ctx.clearRect(0,0, canvas.width, canvas.height); 
+        drawBackground();
         drawBricks();
         drawBall();
         drawPaddle();
